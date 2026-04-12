@@ -133,7 +133,6 @@ function OrderSummary({
         setLoading(false);
       }
     }
-    console.log("Selected List Seat", selectedListSeat);
   };
 
   const hasShowTime = Object.keys(selectedShowTime).length > 0;
@@ -697,7 +696,6 @@ function Order({ id, movie }) {
     seatHubService.start();
 
     seatHubService.listenSeatHold((res) => {
-      console.log("Broadcast: ", res);
       fetchListSeatHolding(res.showTimeID);
       fetchListBookedSeat(res.showTimeID);
     });
@@ -1049,7 +1047,7 @@ function Order({ id, movie }) {
     );
   };
 
-  // console.log("List Show Time: ", listShowTime);
+  console.log("List Show Time: ", listShowTime);
   // console.log("Group Seat: ", listGroupSeat);
   // console.log("Show Time Selected: ", selectedShowTime);
   // console.log("Seat Holding: ", listSeatHolding);
@@ -1185,7 +1183,6 @@ function Booking() {
     return "st-badge--age--all";
   };
 
-  // console.log(movie);
 
   return (
     <>

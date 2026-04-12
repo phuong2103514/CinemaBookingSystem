@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CinemaBookingSystem.Services
@@ -12,10 +13,12 @@ namespace CinemaBookingSystem.Services
     public class ShowTimeService
     {
         private readonly MyDbContext _context;
+        private readonly RedisService _redisService;
 
-        public ShowTimeService(MyDbContext context)
+        public ShowTimeService(MyDbContext context, RedisService redisService)
         {
             _context = context;
+            _redisService = redisService;
         }
 
         public async Task<bool> createShowTime(ShowTimeRequest showTimeRequest)
@@ -238,65 +241,99 @@ namespace CinemaBookingSystem.Services
 
         public async Task<List<ShowTimeByMovieResponse>> getListShowTimeByMovie(Guid id, FilterShowTime filter)
         {
-            var listShowTime = await _context.Cinemas
-                .Where(c => c.Rooms
-                    .SelectMany(r => r.ShowTimes)
-                    .Any(st => 
-                        st.MovieID == id && 
-                        st.StartTime > DateTime.Now &&
-                        (!filter.Date.HasValue || st.StartTime.Date == filter.Date.Value.Date)
-                     ))
-                .Select(c => new ShowTimeByMovieResponse
-                {
-                    Cinema = new CinemaResponse
-                    {
-                        CinemaID = c.CinemaID,
-                        Name = c.Name,
-                        Address = c.Address
-                    },
+            var key = $"getListShowTimeByMovie:{id}:{filter.Date.Value.Date:yyyy-MM-dd}";
+            var cache = await _redisService.GetAsync(key);
 
-                    listShowTime = c.Rooms
-                        .SelectMany(r => r.ShowTimes)
-                        .Where(st => st.MovieID == id 
-                                && st.StartTime > DateTime.Now
-                                && (!filter.Date.HasValue || st.StartTime.Date == filter.Date.Value.Date)
-                         )
-                        .OrderBy(st => st.StartTime)
-                        .Select(st => new ShowTimeResponse
-                        {
-                            ShowTimeID = st.ShowTimeID,
-                            StartTime = st.StartTime,
-                            EndTime = st.EndTime,
-                            Price = st.Price,
-                            Room = new RoomResponse
-                            {
-                                RoomID = st.Room.RoomID,
-                                Name = st.Room.Name,
-                                Col = st.Room.Col,
-                                Row = st.Room.Row,
-                                ListSeat = st.Room.Seats
-                                    .OrderBy(s => s.SeatNumber)
-                                    .Select(s => new SeatResponse {
-                                        SeatID = s.SeatID,
-                                        SeatNumber = s.SeatNumber,
-                                        SeatType = new SeatTypeResponse
-                                        {
-                                            SeatTypeID = s.SeatTypeID,
-                                            Name = s.SeatType.Name,
-                                            Color = s.SeatType.Color,
-                                            PriceMultiplier = s.SeatType.PriceMultiplier,
-                                            Description = s.SeatType.Description
-                                        }
-                                    })
-                                    .ToList()
+            if (string.IsNullOrWhiteSpace(cache))
+            {
+                var listShowTime = await _context.Cinemas
+                   .Where(c => c.Rooms
+                       .SelectMany(r => r.ShowTimes)
+                       .Any(st =>
+                           st.MovieID == id &&
+                           (!filter.Date.HasValue || st.StartTime.Date == filter.Date.Value.Date)
+                        ))
+                   .Select(c => new ShowTimeByMovieResponse
+                   {
+                       Cinema = new CinemaResponse
+                       {
+                           CinemaID = c.CinemaID,
+                           Name = c.Name,
+                           Address = c.Address
+                       },
+                       listShowTime = c.Rooms
+                           .SelectMany(r => r.ShowTimes)
+                           .Where(st => st.MovieID == id
+                                   && (!filter.Date.HasValue || st.StartTime.Date == filter.Date.Value.Date)
+                            )
+                           .OrderBy(st => st.StartTime)
+                           .Select(st => new ShowTimeResponse
+                           {
+                               ShowTimeID = st.ShowTimeID,
+                               StartTime = st.StartTime,
+                               EndTime = st.EndTime,
+                               Price = st.Price,
+                               Room = new RoomResponse
+                               {
+                                   RoomID = st.Room.RoomID,
+                                   Name = st.Room.Name,
+                                   Col = st.Room.Col,
+                                   Row = st.Room.Row,
+                                   ListSeat = st.Room.Seats
+                                       .OrderBy(s => s.SeatNumber)
+                                       .Select(s => new SeatResponse
+                                       {
+                                           SeatID = s.SeatID,
+                                           SeatNumber = s.SeatNumber,
+                                           SeatType = new SeatTypeResponse
+                                           {
+                                               SeatTypeID = s.SeatTypeID,
+                                               Name = s.SeatType.Name,
+                                               Color = s.SeatType.Color,
+                                               PriceMultiplier = s.SeatType.PriceMultiplier,
+                                               Description = s.SeatType.Description
+                                           }
+                                       })
+                                       .ToList()
+                               }
+                           })
+                           .ToList()
+                   })
+                   .ToListAsync();
 
-                            }
-                        })
+                await _redisService.SetIfNotExistAsync(key, JsonSerializer.Serialize(listShowTime), TimeSpan.FromMinutes(10));
+
+                var now = DateTime.Now;
+                listShowTime.ForEach(c =>
+                    c.listShowTime = c.listShowTime
+                        .Where(st => st.StartTime > now)
                         .ToList()
-                })
-                .ToListAsync();
+                );
 
-            return listShowTime;
+                listShowTime = listShowTime
+                    .Where(c => c.listShowTime.Any())
+                    .ToList();
+
+                return listShowTime;
+            }
+            else
+            {
+                await _redisService.ExtendTimeToLiveAsync(key, TimeSpan.FromMinutes(10));
+      
+                var listShowTime = JsonSerializer.Deserialize<List<ShowTimeByMovieResponse>>(cache) ?? new List<ShowTimeByMovieResponse>();
+                var now = DateTime.Now;
+                listShowTime.ForEach(c =>
+                    c.listShowTime = c.listShowTime
+                        .Where(st => st.StartTime > now)
+                        .ToList()
+                );
+
+                listShowTime = listShowTime
+                    .Where(c => c.listShowTime.Any())
+                    .ToList();
+
+                return listShowTime;
+            }
         }
 
         public async Task<List<GroupByShowTimeByMovieResponse>> getListGroupByShowTimeByMovie(Guid id)
