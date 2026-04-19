@@ -277,12 +277,6 @@ function TicketModal({ item, onClose }) {
             </div>
           </div>
         </div>
-
-        {/* <div className="mb-modal__footer">
-          <button className="mb-btn mb-btn--ghost" onClick={onClose}>
-            <i className="fas fa-times me-1"></i>Đóng
-          </button>
-        </div> */}
       </div>
     </div>
   );
@@ -382,12 +376,10 @@ function MyBooking() {
             {item.showTime.movie.title}
           </div>
 
-          <div className="mb-card__meta-row">
+          {/* Desktop meta rows - ẩn trên mobile */}
+          <div className="mb-card__meta-row mb-card__meta-row--desktop">
             <span className="mb-card__meta-item">
-              <i
-                className="fas fa-map-marker-alt"
-                style={{ color: "#ef4444" }}
-              ></i>
+              <i className="fas fa-map-marker-alt" style={{ color: "#ef4444" }}></i>
               {item.showTime.room.cinema.name}
             </span>
             <span className="mb-card__meta-item">
@@ -396,7 +388,7 @@ function MyBooking() {
             </span>
           </div>
 
-          <div className="mb-card__meta-row">
+          <div className="mb-card__meta-row mb-card__meta-row--desktop">
             <span className="mb-card__meta-item">
               <i className="fas fa-calendar"></i>
               {getDayOfWeek(item.showTime.startTime)},{" "}
@@ -409,7 +401,20 @@ function MyBooking() {
             </span>
           </div>
 
-          <div className="mb-card__seats">
+          {/* Mobile compact info - chỉ hiện trên mobile */}
+          <div className="mb-card__meta-compact">
+            <span className="mb-card__meta-item mb-card__meta-item--gold">
+              <i className="fas fa-clock"></i>
+              {getTime(item.showTime.startTime)} · {getDate(item.showTime.startTime)}
+            </span>
+            <span className="mb-card__meta-item">
+              <i className="fas fa-map-marker-alt" style={{ color: "#ef4444" }}></i>
+              {item.showTime.room.cinema.name}
+            </span>
+          </div>
+
+          {/* Seats - ẩn trên mobile nhỏ */}
+          <div className="mb-card__seats mb-card__seats--responsive">
             <span className="mb-card__seats-label">Ghế:</span>
             {item.bookingSeats.map((s) => (
               <span key={s.bookingSeatID} className="mb-seat-badge">
@@ -419,7 +424,7 @@ function MyBooking() {
           </div>
 
           <div className="mb-card__price-row">
-            <span className="mb-card__price-label">Tổng thanh toán</span>
+            <span className="mb-card__price-label">Tổng</span>
             <span className="mb-card__price-value">
               {formatPrice(item.totalPrice)}
             </span>
@@ -428,19 +433,15 @@ function MyBooking() {
 
         {/* Side */}
         <div className="mb-card__side">
-          {upcoming ? (
-            <span className="mb-status mb-status--upcoming">
-              <i className="fas fa-circle me-1"></i>Sắp chiếu
-            </span>
-          ) : (
-            <span className="mb-status mb-status--watched">
-              <i className="fas fa-check-circle me-1"></i>Đã xem
-            </span>
-          )}
+          {/* Status badge - ẩn trên mobile nhỏ (đã có tab) */}
+          <span className={`mb-status mb-card__status-badge ${upcoming ? "mb-status--upcoming" : "mb-status--watched"}`}>
+            <i className={`fas ${upcoming ? "fa-circle" : "fa-check-circle"} me-1`}></i>
+            {upcoming ? "Sắp chiếu" : "Đã xem"}
+          </span>
 
           {upcoming && countdown && (
             <div className="mb-card__countdown">
-              <div className="mb-countdown-label">Còn lại</div>
+              <div className="mb-countdown-label">Còn</div>
               <div className="mb-countdown-time">{countdown}</div>
             </div>
           )}
@@ -450,11 +451,13 @@ function MyBooking() {
               className="mb-btn mb-btn--primary"
               onClick={() => setSelectedBooking(item)}
             >
-              <i className="fas fa-qrcode me-1"></i>Xem vé
+              <i className="fas fa-qrcode me-1"></i>
+              <span className="mb-btn__text">Xem vé</span>
             </button>
             {!upcoming && (
               <button className="mb-btn mb-btn--ghost">
-                <i className="fas fa-star me-1"></i>Đánh giá
+                <i className="fas fa-star me-1"></i>
+                <span className="mb-btn__text">Đánh giá</span>
               </button>
             )}
           </div>
@@ -482,7 +485,7 @@ function MyBooking() {
             </div>
           </div>
 
-          {/* SEARCH BAR — giống ShowTime */}
+          {/* SEARCH BAR */}
           <div className="mb-search-section">
             <div className="st-search-bar">
               <i className="fas fa-search st-search-bar__icon"></i>
@@ -495,7 +498,8 @@ function MyBooking() {
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
               <button className="st-search-bar__btn" onClick={handleSearch}>
-                <i className="fas fa-search me-2"></i>Tìm Kiếm
+                <i className="fas fa-search me-2"></i>
+                <span className="st-search-bar__btn-text">Tìm Kiếm</span>
               </button>
             </div>
           </div>
@@ -505,10 +509,7 @@ function MyBooking() {
             <div className="row g-3 align-items-end">
               <div className="col-xl-3 col-lg-4 col-md-6 col-12">
                 <label className="st-filter-sublabel">
-                  <i
-                    className="fas fa-calendar-alt me-1"
-                    style={{ color: "#f5a623" }}
-                  ></i>
+                  <i className="fas fa-calendar-alt me-1" style={{ color: "#f5a623" }}></i>
                   Ngày chiếu
                 </label>
                 <div className="st-date-picker-wrap">
@@ -541,18 +542,14 @@ function MyBooking() {
           {/* TABS */}
           <div className="st-status-tabs mb-4">
             <button
-              className={`st-status-tab${
-                activeTab === "upcoming" ? " st-status-tab--active" : ""
-              }`}
+              className={`st-status-tab${activeTab === "upcoming" ? " st-status-tab--active" : ""}`}
               onClick={() => setActiveTab("upcoming")}
             >
               <span className="st-dot st-dot--showtime"></span>
               Sắp chiếu
             </button>
             <button
-              className={`st-status-tab${
-                activeTab === "watched" ? " st-status-tab--active" : ""
-              }`}
+              className={`st-status-tab${activeTab === "watched" ? " st-status-tab--active" : ""}`}
               onClick={() => setActiveTab("watched")}
             >
               <span className="st-dot st-dot--ended"></span>
@@ -565,11 +562,7 @@ function MyBooking() {
             {listBooking.length === 0 && !loading ? (
               <div className="mb-empty">
                 <div className="mb-empty__icon">
-                  <i
-                    className={`fas ${
-                      activeTab === "upcoming" ? "fa-ticket-alt" : "fa-film"
-                    }`}
-                  ></i>
+                  <i className={`fas ${activeTab === "upcoming" ? "fa-ticket-alt" : "fa-film"}`}></i>
                 </div>
                 <p className="mb-empty__title">
                   {activeTab === "upcoming"
@@ -601,7 +594,6 @@ function MyBooking() {
 
       <Footer />
 
-      {/* Modal */}
       {selectedBooking && (
         <TicketModal
           item={selectedBooking}

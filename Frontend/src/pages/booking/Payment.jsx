@@ -63,7 +63,7 @@ function CheckoutForm({ bookingDraftID, showTimeID, userID }) {
       if (error) {
         setErrorMsg(error.message);
         setProcessing(false);
-        setLoading(false); // 
+        setLoading(false);
       } else if (paymentIntent) {
         handleCheckValidPayment(paymentIntent);
       }
@@ -97,7 +97,6 @@ function CheckoutForm({ bookingDraftID, showTimeID, userID }) {
       setLoading(false);
     }
   };
-
 
   return (
     <>
@@ -433,7 +432,7 @@ function Payment() {
 
   return (
     <div className="pm-wrapper">
-      <div className="container-fluid">
+      <div className="pm-container">
         {/* MOVIE INFO BAR */}
         <div className="bk-movie-bar">
           <div className="bk-movie-bar__poster">
@@ -475,9 +474,10 @@ function Payment() {
           </div>
         </div>
 
-        <div className="row g-4">
+        {/* MAIN LAYOUT */}
+        <div className="pm-layout">
           {/* CỘT TRÁI */}
-          <div className="col-lg-7">
+          <div className="pm-layout__left">
             {/* STRIPE PANEL */}
             <div className="bk-section mb-4">
               <div className="bk-section__header">
@@ -514,11 +514,13 @@ function Payment() {
           </div>
 
           {/* CỘT PHẢI */}
-          <div className="col-lg-5">
+          <div className="pm-layout__right">
             <PaymentInfo booking={booking} />
           </div>
         </div>
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 }

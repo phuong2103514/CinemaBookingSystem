@@ -29,38 +29,30 @@ function Banner() {
     const fetchMovieBanner = async () => {
       try {
         setLoadingBanner(true);
-
         const data = await movieService.getListMovieBanner(1, 5, {});
-        console.log(data);
         setListMovieBanner(data);
         if (data.length > 0) {
           setCurrentBannerIndex(0);
           setMovieBannerChoosing(data[0]);
         }
-
         setLoadingBanner(false);
       } catch (err) {
         alert("Không thể tải danh sách banner phim");
         setLoadingBanner(false);
       }
     };
-
     fetchMovieBanner();
   }, []);
 
   useEffect(() => {
     if (!listMovieBanner || listMovieBanner.length === 0) return;
-
     const interval = setInterval(() => {
       setCurrentBannerIndex((prev) => {
         const nextIndex = prev === listMovieBanner.length - 1 ? 0 : prev + 1;
-
         setMovieBannerChoosing(listMovieBanner[nextIndex]);
-
         return nextIndex;
       });
     }, 5000);
-
     return () => clearInterval(interval);
   }, [listMovieBanner]);
 
@@ -90,7 +82,6 @@ function Banner() {
             Ngày khởi chiếu:{" "}
             {convertFormatDate(movieBannerChoosing?.releaseDate)}
           </div>
-
           <div className="home-hero__tags mt-1">
             <span>Thể loại: </span>
             {movieBannerChoosing?.listGenre?.map((it) => (
@@ -129,7 +120,6 @@ function Banner() {
               key={item.movieID}
               onClick={() => {
                 setMovieBannerChoosing(item);
-
                 const index = listMovieBanner.findIndex(
                   (it) => it.movieID === item.movieID
                 );
@@ -167,8 +157,7 @@ function Home() {
   const [loadingListMovieMystery, setLoadingListMovieMystery] = useState(false);
 
   const [listMovieAnimation, setListMovieAnimation] = useState([]);
-  const [loadingListMovieAnimation, setLoadingListMovieAnimation] =
-    useState(false);
+  const [loadingListMovieAnimation, setLoadingListMovieAnimation] = useState(false);
 
   const convertFormatDate = (date) => {
     return new Date(date).toLocaleDateString("vi-VN", {
@@ -198,20 +187,16 @@ function Home() {
     const fetchListMovieUs = async () => {
       try {
         setLoadingListMovieUs(true);
-
         const data = await movieService.getListMovieByCountry(1, 6, {
           country: "United States of America",
         });
-
         setListMovieUs(data);
-
         setLoadingListMovieUs(false);
       } catch (err) {
         alert("Không thể tải danh sách phim Us");
         setLoadingListMovieUs(false);
       }
     };
-
     fetchListMovieUs();
   }, []);
 
@@ -219,20 +204,16 @@ function Home() {
     const fetchListMovieFrance = async () => {
       try {
         setLoadingListMovieFrance(true);
-
         const data = await movieService.getListMovieByCountry(1, 6, {
           country: "France",
         });
-
         setListMovieFrance(data);
-
         setLoadingListMovieFrance(false);
       } catch (err) {
         alert("Không thể tải danh sách phim France");
         setLoadingListMovieFrance(false);
       }
     };
-
     fetchListMovieFrance();
   }, []);
 
@@ -240,20 +221,16 @@ function Home() {
     const fetchListMovieChina = async () => {
       try {
         setLoadingListMovieChina(true);
-
         const data = await movieService.getListMovieByCountry(1, 6, {
           country: "China",
         });
-
         setListMovieChina(data);
-
         setLoadingListMovieChina(false);
       } catch (err) {
         alert("Không thể tải danh sách phim China");
         setLoadingListMovieChina(false);
       }
     };
-
     fetchListMovieChina();
   }, []);
 
@@ -265,7 +242,7 @@ function Home() {
   ) => {
     if (loadingListMovieByCountry) {
       return (
-        <div className="col-lg-12">
+        <div className="col-12">
           <LoadingSkeleton count={3} />
         </div>
       );
@@ -302,14 +279,12 @@ function Home() {
                       {convertFormatDate(item.releaseDate)}
                     </span>
                   </div>
-
                   <span className="home-card__ep home-card__ep--soon">
                     {item.status.name}
                   </span>
                 </div>
-
                 <Link to={`/detailMovie/${item.movieID}`}>
-                <p className="home-card__name">{item.title}</p>
+                  <p className="home-card__name">{item.title}</p>
                 </Link>
                 <p className="home-card__sub">{item.title}</p>
               </div>
@@ -336,57 +311,50 @@ function Home() {
     const fetchListMovieAction = async () => {
       try {
         setLoadingListMovieAction(true);
-
         const data = await movieService.getListMovieByGenre(1, 4, {
           genreName: "Action",
         });
-
         setListMovieAction(data);
-
         setLoadingListMovieAction(false);
       } catch (err) {
         alert("Không thể tải danh sách phim Action");
         setLoadingListMovieAction(false);
       }
     };
-
     fetchListMovieAction();
   }, []);
 
   const renderListMovieAction = () => {
     if (loadingListMovieAction) {
       return (
-        <div className="col-lg-12">
+        <div className="col-12">
           <LoadingSkeleton count={4} />
         </div>
       );
     }
 
     return listMovieAction.map((item) => (
-      <div className="col-lg-3 home-card--cinema" key={item.movieID}>
+      <div className="col-6 col-md-4 col-lg-3 home-card--cinema mb-4" key={item.movieID}>
         <div className="home-card__wrap">
           <Link to={`/detailMovie/${item.movieID}`}>
-          <img src={item.bannerUrl} alt="" className="home-card__banner" />
+            <img src={item.bannerUrl} alt="" className="home-card__banner" />
           </Link>
         </div>
         <div className="home-card__bottom">
           <div className="home-card__poster-wrap">
-          <Link to={`/detailMovie/${item.movieID}`}>
-           <img src={item.posterUrl} alt="" className="home-card__poster" />
-          </Link>
-           
+            <Link to={`/detailMovie/${item.movieID}`}>
+              <img src={item.posterUrl} alt="" className="home-card__poster" />
+            </Link>
             <span className="home-card__poster-badge">
               {`${new Date(item.releaseDate).getDate()}/${
                 new Date(item.releaseDate).getMonth() + 1
               }`}
             </span>
           </div>
-
           <div className="home-card__info">
-          <Link to={`/detailMovie/${item.movieID}`}>
-          <p className="home-card__name">{item.title}</p>
-          </Link>
-            
+            <Link to={`/detailMovie/${item.movieID}`}>
+              <p className="home-card__name">{item.title}</p>
+            </Link>
             <p className="home-card__sub">
               <span>{item.title}</span>
             </p>
@@ -405,47 +373,41 @@ function Home() {
     const fetchListMovieMystery = async () => {
       try {
         setLoadingListMovieMystery(true);
-
         const data = await movieService.getListMovieByGenre(1, 6, {
           genreName: "Mystery",
         });
-
         setListMovieMystery(data);
-
         setLoadingListMovieMystery(false);
       } catch (err) {
         alert("Không thể tải danh sách phim Mystery");
         setLoadingListMovieMystery(false);
       }
     };
-
     fetchListMovieMystery();
   }, []);
 
   const renderListMovieMystery = () => {
     if (loadingListMovieMystery) {
       return (
-        <div className="col-lg-12">
+        <div className="col-12">
           <LoadingSkeleton count={6} />
         </div>
       );
     }
 
     return listMovieMystery.map((item) => (
-      <div className="col-lg-2 home-card--portrait" key={item.movieID}>
+      <div className="col-6 col-md-4 col-lg-2 home-card--portrait mb-4" key={item.movieID}>
         <div className="home-card__wrap">
-        <Link to={`/detailMovie/${item.movieID}`}>
-        <img src={item.posterUrl} alt="" className="home-card__img" />
+          <Link to={`/detailMovie/${item.movieID}`}>
+            <img src={item.posterUrl} alt="" className="home-card__img" />
           </Link>
-          
           <span className="home-card__ep home-card__ep--soon">
             {item.status.name}
           </span>
         </div>
         <Link to={`/detailMovie/${item.movieID}`}>
-        <p className="home-card__name">{item.title}</p>
-          </Link>
-    
+          <p className="home-card__name">{item.title}</p>
+        </Link>
         <p className="home-card__sub">{item.title}</p>
       </div>
     ));
@@ -455,47 +417,41 @@ function Home() {
     const fetchListMovieAnimation = async () => {
       try {
         setLoadingListMovieAnimation(true);
-
         const data = await movieService.getListMovieByGenre(1, 4, {
           genreName: "Animation",
         });
-
         setListMovieAnimation(data);
-
         setLoadingListMovieAnimation(false);
       } catch (err) {
         alert("Không thể tải danh sách phim Animation");
         setLoadingListMovieAnimation(false);
       }
     };
-
     fetchListMovieAnimation();
   }, []);
 
   const renderListMovieAnimation = () => {
     if (loadingListMovieAnimation) {
       return (
-        <div className="col-lg-12">
+        <div className="col-12">
           <LoadingSkeleton count={4} />
         </div>
       );
     }
 
     return listMovieAnimation.map((item) => (
-      <div className="col-lg-3 home-card--upcoming" key={item.movieID}>
+      <div className="col-6 col-md-4 col-lg-3 home-card--upcoming mb-4" key={item.movieID}>
         <div className="home-card__wrap">
-        <Link to={`/detailMovie/${item.movieID}`}>
-        <img src={item.bannerUrl} alt="" className="home-card__img" />
+          <Link to={`/detailMovie/${item.movieID}`}>
+            <img src={item.bannerUrl} alt="" className="home-card__img" />
           </Link>
-          
           <span className="home-card__ep home-card__ep--soon">
             {item.status.name}
           </span>
         </div>
         <Link to={`/detailMovie/${item.movieID}`}>
-        <p className="home-card__name">{item.title}</p>
-          </Link>
-       
+          <p className="home-card__name">{item.title}</p>
+        </Link>
         <p className="home-card__sub">
           <span>{item.title}</span>
         </p>
@@ -512,109 +468,93 @@ function Home() {
         <Banner />
 
         <div className="home-body">
+          {/* SECTION: PHIM THEO QUỐC GIA */}
           <section className="container-fluid home-section--grid">
             <div className="row home-section-style-1">
-              <div className="row mb-3">
-                <div className="col-lg-2">
-                  <div className="home-section__head-style-1">
-                    <div className="home-section__header--wrapper">
-                      <h2 className="home-section__title home-section__title--blue-purple mb-3">
-                        Phim US-
-                        <br />
-                        UK Mới
-                      </h2>
-                      <span
-                        className="home-section__view-all"
-                        onClick={() => {
-                          history.push("/showTimes", {
-                            countryId: "1ab7b137-cbff-4837-b3f6-f9e164d614a7",
-                          });
-                        }}
-                      >
-                        {"Xem toàn bộ  >"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+              {/* Phim US-UK */}
+<div className="country-section mb-5">
+  <div className="country-section__header">
+    <h2 className="home-section__title home-section__title--blue-purple">
+      Phim US-UK Mới
+    </h2>
+    <span
+      className="home-section__view-all"
+      onClick={() => {
+        history.push("/showTimes", {
+          countryId: "1ab7b137-cbff-4837-b3f6-f9e164d614a7",
+        });
+      }}
+    >
+      {"Xem toàn bộ  >"}
+    </span>
+  </div>
+  <div className="country-section__slider position-relative">
+    {renderListMovieByCountry(
+      loadingListMovieUs,
+      indexElementMovieUs,
+      setIndexElementMovieUs,
+      listMovieUs
+    )}
+  </div>
+</div>
 
-                <div className="col-lg-10 position-relative">
-                  {renderListMovieByCountry(
-                    loadingListMovieUs,
-                    indexElementMovieUs,
-                    setIndexElementMovieUs,
-                    listMovieUs
-                  )}
-                </div>
-              </div>
+{/* Phim Pháp */}
+<div className="country-section mb-5">
+  <div className="country-section__header">
+    <h2 className="home-section__title home-section__title--pink">
+      Phim Pháp Mới
+    </h2>
+    <span
+      className="home-section__view-all"
+      onClick={() => {
+        history.push("/showTimes", {
+          countryId: "22bf728b-0c3d-4c1d-b55d-de602ed5bb44",
+        });
+      }}
+    >
+      {"Xem toàn bộ  >"}
+    </span>
+  </div>
+  <div className="country-section__slider position-relative">
+    {renderListMovieByCountry(
+      loadingListMovieFrance,
+      indexElementMovieFrance,
+      setIndexElementMovieFrance,
+      listMovieFrance
+    )}
+  </div>
+</div>
 
-              <div className="row mt-5 mb-3">
-                <div className="col-lg-2">
-                  <div className="home-section__head-style-1">
-                    <div className="home-section__header--wrapper">
-                      <h2 className="home-section__title home-section__title--pink mb-3">
-                        Phim Pháp
-                        <br />
-                        Mới
-                      </h2>
-                      <span
-                        className="home-section__view-all"
-                        onClick={() => {
-                          history.push("/showTimes", {
-                            countryId: "22bf728b-0c3d-4c1d-b55d-de602ed5bb44",
-                          });
-                        }}
-                      >
-                        {"Xem toàn bộ  >"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-lg-10 position-relative">
-                  {renderListMovieByCountry(
-                    loadingListMovieFrance,
-                    indexElementMovieFrance,
-                    setIndexElementMovieFrance,
-                    listMovieFrance
-                  )}
-                </div>
-              </div>
-
-              <div className="row mt-5 mb-3">
-                <div className="col-lg-2">
-                  <div className="home-section__head-style-1">
-                    <div className="home-section__header--wrapper">
-                      <h2 className="home-section__title home-section__title--orange-yellow mb-3">
-                        Phim Trung
-                        <br />
-                        Quốc Mới
-                      </h2>
-                      <span
-                        className="home-section__view-all"
-                        onClick={() => {
-                          history.push("/showTimes", {
-                            countryId: "31cd02d9-6eff-48ad-8df9-5a16c5a8b7b7'",
-                          });
-                        }}
-                      >
-                        {"Xem toàn bộ  >"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-lg-10 position-relative">
-                  {renderListMovieByCountry(
-                    loadingListMovieChina,
-                    indexElementMovieChina,
-                    setIndexElementMovieChina,
-                    listMovieChina
-                  )}
-                </div>
-              </div>
+{/* Phim Trung Quốc */}
+<div className="country-section">
+  <div className="country-section__header">
+    <h2 className="home-section__title home-section__title--orange-yellow">
+      Phim Trung Quốc Mới
+    </h2>
+    <span
+      className="home-section__view-all"
+      onClick={() => {
+        history.push("/showTimes", {
+          countryId: "31cd02d9-6eff-48ad-8df9-5a16c5a8b7b7",
+        });
+      }}
+    >
+      {"Xem toàn bộ  >"}
+    </span>
+  </div>
+  <div className="country-section__slider position-relative">
+    {renderListMovieByCountry(
+      loadingListMovieChina,
+      indexElementMovieChina,
+      setIndexElementMovieChina,
+      listMovieChina
+    )}
+  </div>
+</div>
             </div>
           </section>
 
+          {/* SECTION: HÀNH ĐỘNG */}
           <section className="container-fluid home-section mb-5">
             <div className="home-section__head mb-5">
               <h2 className="home-section__title">
@@ -631,10 +571,10 @@ function Home() {
                 ›
               </button>
             </div>
-
             <div className="row">{renderListMovieAction()}</div>
           </section>
 
+          {/* SECTION: BÍ ẨN */}
           <section className="container-fluid home-section mt-5 mb-5">
             <div className="home-section__head mb-5">
               <h2 className="home-section__title">Cân Não với Phim Bí Ẩn</h2>
@@ -649,10 +589,10 @@ function Home() {
                 ›
               </button>
             </div>
-
             <div className="row">{renderListMovieMystery()}</div>
           </section>
 
+          {/* SECTION: HOẠT HÌNH */}
           <section className="container-fluid home-section">
             <div className="home-section__head mb-5">
               <h2 className="home-section__title">
@@ -669,7 +609,6 @@ function Home() {
                 ›
               </button>
             </div>
-
             <div className="row">{renderListMovieAnimation()}</div>
           </section>
         </div>

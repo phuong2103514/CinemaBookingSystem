@@ -139,7 +139,7 @@ function OrderSummary({
   // Chưa chọn suất chiếu
   if (!hasShowTime) {
     return (
-      <div className="col-lg-4">
+      <div className="col-lg-4 bk-summary-col">
         <div className="bk-summary-card">
           <h4 className="bk-summary-card__title">
             <i className="fas fa-receipt me-2"></i>Thông Tin Đặt Vé
@@ -151,73 +151,13 @@ function OrderSummary({
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <rect
-                  x="8"
-                  y="14"
-                  width="40"
-                  height="30"
-                  rx="6"
-                  fill="rgba(245,166,35,0.12)"
-                  stroke="#f5a623"
-                  strokeWidth="1.6"
-                />
-                <line
-                  x1="8"
-                  y1="24"
-                  x2="48"
-                  y2="24"
-                  stroke="#f5a623"
-                  strokeWidth="1.2"
-                  strokeOpacity="0.5"
-                />
-                <rect
-                  x="13"
-                  y="29"
-                  width="8"
-                  height="6"
-                  rx="2"
-                  fill="rgba(245,166,35,0.3)"
-                  stroke="#f5a623"
-                  strokeWidth="1"
-                />
-                <rect
-                  x="24"
-                  y="29"
-                  width="8"
-                  height="6"
-                  rx="2"
-                  fill="rgba(245,166,35,0.3)"
-                  stroke="#f5a623"
-                  strokeWidth="1"
-                />
-                <rect
-                  x="35"
-                  y="29"
-                  width="8"
-                  height="6"
-                  rx="2"
-                  fill="rgba(245,166,35,0.15)"
-                  stroke="rgba(245,166,35,0.4)"
-                  strokeWidth="1"
-                />
-                <line
-                  x1="20"
-                  y1="8"
-                  x2="20"
-                  y2="18"
-                  stroke="#f5a623"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="36"
-                  y1="8"
-                  x2="36"
-                  y2="18"
-                  stroke="#f5a623"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
+                <rect x="8" y="14" width="40" height="30" rx="6" fill="rgba(245,166,35,0.12)" stroke="#f5a623" strokeWidth="1.6" />
+                <line x1="8" y1="24" x2="48" y2="24" stroke="#f5a623" strokeWidth="1.2" strokeOpacity="0.5" />
+                <rect x="13" y="29" width="8" height="6" rx="2" fill="rgba(245,166,35,0.3)" stroke="#f5a623" strokeWidth="1" />
+                <rect x="24" y="29" width="8" height="6" rx="2" fill="rgba(245,166,35,0.3)" stroke="#f5a623" strokeWidth="1" />
+                <rect x="35" y="29" width="8" height="6" rx="2" fill="rgba(245,166,35,0.15)" stroke="rgba(245,166,35,0.4)" strokeWidth="1" />
+                <line x1="20" y1="8" x2="20" y2="18" stroke="#f5a623" strokeWidth="2" strokeLinecap="round" />
+                <line x1="36" y1="8" x2="36" y2="18" stroke="#f5a623" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </div>
             <p>Chưa chọn suất chiếu</p>
@@ -257,7 +197,7 @@ function OrderSummary({
       return seat;
     });
 
-    if(listMySeatID.length > 0) {
+    if (listMySeatID.length > 0) {
       return (
         <>
           <div className="bk-booked-block mt-2">
@@ -313,16 +253,16 @@ function OrderSummary({
       );
     }
   };
+
   // Đã chọn suất nhưng chưa chọn ghế
   if (!hasSeats) {
     return (
-      <div className="col-lg-4">
+      <div className="col-lg-4 bk-summary-col">
         <div className="bk-summary-card">
           <h4 className="bk-summary-card__title">
             <i className="fas fa-receipt me-2"></i>Thông Tin Đặt Vé
           </h4>
 
-          {/* Tóm tắt suất đã chọn */}
           <div className="bk-summary-row">
             <span className="bk-summary-label">
               <i className="fas fa-film me-2"></i>Phim
@@ -364,83 +304,14 @@ function OrderSummary({
 
           <div className="bk-order-empty bk-order-empty--sm">
             <div className="bk-order-empty__icon">
-              <svg
-                viewBox="0 0 56 56"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  filter: "drop-shadow(0 0 6px rgba(245,166,35,0.6))",
-                }}
-              >
-                <rect
-                  x="12"
-                  y="20"
-                  width="32"
-                  height="18"
-                  rx="5"
-                  fill="rgba(245,166,35,0.25)"
-                  stroke="#f5a623"
-                  strokeWidth="1.8"
-                />
-                <rect
-                  x="16"
-                  y="11"
-                  width="24"
-                  height="12"
-                  rx="4"
-                  fill="rgba(245,166,35,0.18)"
-                  stroke="rgba(245,166,35,0.6)"
-                  strokeWidth="1.5"
-                />
-                <rect
-                  x="8"
-                  y="22"
-                  width="7"
-                  height="12"
-                  rx="3"
-                  fill="rgba(245,166,35,0.15)"
-                  stroke="rgba(245,166,35,0.5)"
-                  strokeWidth="1.5"
-                />
-                <rect
-                  x="41"
-                  y="22"
-                  width="7"
-                  height="12"
-                  rx="3"
-                  fill="rgba(245,166,35,0.15)"
-                  stroke="rgba(245,166,35,0.5)"
-                  strokeWidth="1.5"
-                />
-                <line
-                  x1="18"
-                  y1="38"
-                  x2="16"
-                  y2="46"
-                  stroke="#f5a623"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="38"
-                  y1="38"
-                  x2="40"
-                  y2="46"
-                  stroke="#f5a623"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-                <text
-                  x="28"
-                  y="32"
-                  textAnchor="middle"
-                  fill="#f5a623"
-                  fontSize="11"
-                  fontWeight="800"
-                  fontFamily="sans-serif"
-                >
-                  ?
-                </text>
+              <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: "drop-shadow(0 0 6px rgba(245,166,35,0.6))" }}>
+                <rect x="12" y="20" width="32" height="18" rx="5" fill="rgba(245,166,35,0.25)" stroke="#f5a623" strokeWidth="1.8" />
+                <rect x="16" y="11" width="24" height="12" rx="4" fill="rgba(245,166,35,0.18)" stroke="rgba(245,166,35,0.6)" strokeWidth="1.5" />
+                <rect x="8" y="22" width="7" height="12" rx="3" fill="rgba(245,166,35,0.15)" stroke="rgba(245,166,35,0.5)" strokeWidth="1.5" />
+                <rect x="41" y="22" width="7" height="12" rx="3" fill="rgba(245,166,35,0.15)" stroke="rgba(245,166,35,0.5)" strokeWidth="1.5" />
+                <line x1="18" y1="38" x2="16" y2="46" stroke="#f5a623" strokeWidth="1.8" strokeLinecap="round" />
+                <line x1="38" y1="38" x2="40" y2="46" stroke="#f5a623" strokeWidth="1.8" strokeLinecap="round" />
+                <text x="28" y="32" textAnchor="middle" fill="#f5a623" fontSize="11" fontWeight="800" fontFamily="sans-serif">?</text>
               </svg>
             </div>
             {(() => {
@@ -474,7 +345,7 @@ function OrderSummary({
 
   return (
     <>
-      <div className="col-lg-4">
+      <div className="col-lg-4 bk-summary-col">
         <div className="bk-summary-card">
           <h4 className="bk-summary-card__title">
             <i className="fas fa-receipt me-2"></i>Thông Tin Đặt Vé
@@ -641,6 +512,9 @@ function Order({ id, movie }) {
 
   const [listSeatHolding, setListSeatHolding] = useState([]);
   const [listBookedSeat, setListBookedSeat] = useState([]);
+
+  // ── NEW: mobile summary drawer state ──
+  const [showMobileSummary, setShowMobileSummary] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -857,89 +731,14 @@ function Order({ id, movie }) {
       return (
         <div className="bk-seat-empty">
           <div className="bk-seat-empty__icon">
-            <svg
-              viewBox="0 0 56 56"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                filter: "drop-shadow(0 0 6px rgba(245,166,35,0.6))",
-              }}
-            >
-              <rect
-                x="12"
-                y="20"
-                width="32"
-                height="18"
-                rx="5"
-                fill="rgba(245,166,35,0.25)"
-                stroke="#f5a623"
-                strokeWidth="1.8"
-              />
-
-              <rect
-                x="16"
-                y="11"
-                width="24"
-                height="12"
-                rx="4"
-                fill="rgba(245,166,35,0.18)"
-                stroke="rgba(245,166,35,0.6)"
-                strokeWidth="1.5"
-              />
-
-              <rect
-                x="8"
-                y="22"
-                width="7"
-                height="12"
-                rx="3"
-                fill="rgba(245,166,35,0.15)"
-                stroke="rgba(245,166,35,0.5)"
-                strokeWidth="1.5"
-              />
-
-              <rect
-                x="41"
-                y="22"
-                width="7"
-                height="12"
-                rx="3"
-                fill="rgba(245,166,35,0.15)"
-                stroke="rgba(245,166,35,0.5)"
-                strokeWidth="1.5"
-              />
-
-              <line
-                x1="18"
-                y1="38"
-                x2="16"
-                y2="46"
-                stroke="#f5a623"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-
-              <line
-                x1="38"
-                y1="38"
-                x2="40"
-                y2="46"
-                stroke="#f5a623"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-
-              <text
-                x="28"
-                y="32"
-                textAnchor="middle"
-                fill="#f5a623"
-                fontSize="11"
-                fontWeight="800"
-                fontFamily="sans-serif"
-              >
-                ?
-              </text>
+            <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: "drop-shadow(0 0 6px rgba(245,166,35,0.6))" }}>
+              <rect x="12" y="20" width="32" height="18" rx="5" fill="rgba(245,166,35,0.25)" stroke="#f5a623" strokeWidth="1.8" />
+              <rect x="16" y="11" width="24" height="12" rx="4" fill="rgba(245,166,35,0.18)" stroke="rgba(245,166,35,0.6)" strokeWidth="1.5" />
+              <rect x="8" y="22" width="7" height="12" rx="3" fill="rgba(245,166,35,0.15)" stroke="rgba(245,166,35,0.5)" strokeWidth="1.5" />
+              <rect x="41" y="22" width="7" height="12" rx="3" fill="rgba(245,166,35,0.15)" stroke="rgba(245,166,35,0.5)" strokeWidth="1.5" />
+              <line x1="18" y1="38" x2="16" y2="46" stroke="#f5a623" strokeWidth="1.8" strokeLinecap="round" />
+              <line x1="38" y1="38" x2="40" y2="46" stroke="#f5a623" strokeWidth="1.8" strokeLinecap="round" />
+              <text x="28" y="32" textAnchor="middle" fill="#f5a623" fontSize="11" fontWeight="800" fontFamily="sans-serif">?</text>
             </svg>
           </div>
           <p>Vui lòng chọn suất chiếu</p>
@@ -961,26 +760,17 @@ function Order({ id, movie }) {
           ))}
 
           <div className="bk-legend-item">
-            <div
-              className="bk-seat dynamic-seat bk-seat--selected"
-              style={{ "--seat-color": "#a855f7" }}
-            />
+            <div className="bk-seat dynamic-seat bk-seat--selected" style={{ "--seat-color": "#a855f7" }} />
             <span>Bạn chọn</span>
           </div>
 
           <div className="bk-legend-item">
-            <div
-              className="bk-seat dynamic-seat bk-seat--holding"
-              style={{ "--seat-color": "#f97316" }}
-            />
+            <div className="bk-seat dynamic-seat bk-seat--holding" style={{ "--seat-color": "#f97316" }} />
             <span>Người khác giữ</span>
           </div>
 
           <div className="bk-legend-item">
-            <div
-              className="bk-seat dynamic-seat bk-seat--my-booked"
-              style={{ "--seat-color": "#ff0033" }}
-            />
+            <div className="bk-seat dynamic-seat bk-seat--my-booked" style={{ "--seat-color": "#ff0033" }} />
             <span>Bạn đã đặt</span>
           </div>
 
@@ -990,35 +780,38 @@ function Order({ id, movie }) {
           </div>
         </div>
 
-        <div className="bk-seat-map">
-          {listGroupSeat?.map((item, index) => (
-            <div className="bk-seat-row" key={index}>
-              <span className="bk-seat-row__label">
-                {item[0].seatNumber[0]}
-              </span>
+        <div className="bk-seat-map-scroll">
+          <div className="bk-seat-map">
+            {listGroupSeat?.map((item, index) => (
+              <div className="bk-seat-row" key={index}>
+                <span className="bk-seat-row__label">
+                  {item[0].seatNumber[0]}
+                </span>
 
-              {item.map((s) => (
-                <div
-                  key={s.seatID}
-                  className={`bk-seat dynamic-seat ${renderStatusSeatClass(s)}`}
-                  style={{ "--seat-color": s.seatType.color }}
-                  onClick={() => {
-                    if (
-                      renderStatusSeatClass(s) !== "bk-seat--taken" &&
-                      renderStatusSeatClass(s) !== "bk-seat--holding" &&
-                      renderStatusSeatClass(s) !== "bk-seat--my-booked"
-                    ) {
-                      handleSelectSeat(s);
-                    }
-                  }}
-                />
-              ))}
+                {item.map((s) => (
+                  <div
+                    key={s.seatID}
+                    className={`bk-seat dynamic-seat ${renderStatusSeatClass(s)}`}
+                    style={{ "--seat-color": s.seatType.color }}
+                    onClick={() => {
+                      if (
+                        renderStatusSeatClass(s) !== "bk-seat--taken" &&
+                        renderStatusSeatClass(s) !== "bk-seat--holding" &&
+                        renderStatusSeatClass(s) !== "bk-seat--my-booked" &&
+                        bookingInfo === null
+                      ) {
+                        handleSelectSeat(s);
+                      }
+                    }}
+                  />
+                ))}
 
-              <span className="bk-seat-row__label">
-                {item[0].seatNumber[0]}
-              </span>
-            </div>
-          ))}
+                <span className="bk-seat-row__label">
+                  {item[0].seatNumber[0]}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </>
     );
@@ -1047,10 +840,12 @@ function Order({ id, movie }) {
     );
   };
 
-  console.log("List Show Time: ", listShowTime);
-  // console.log("Group Seat: ", listGroupSeat);
-  // console.log("Show Time Selected: ", selectedShowTime);
-  // console.log("Seat Holding: ", listSeatHolding);
+  console.log("Booking info", bookingInfo);
+
+  // Tính số ghế đang giữ của user để hiện trên FAB
+  const myHeldSeatsCount = listSeatHolding.filter(
+    (sh) => sh.userID === getUserId()
+  ).length;
 
   return (
     <>
@@ -1131,15 +926,60 @@ function Order({ id, movie }) {
           {renderSeat()}
         </div>
 
-        <OrderSummary
-          movie={movie}
-          listSeatHolding={listSeatHolding}
-          selectedCinema={selectedCinema}
-          selectedShowTime={selectedShowTime}
-          bookingInfo={bookingInfo}
-          listBookedSeat={listBookedSeat}
-        />
+        {/* ══ CỘT PHẢI — ẩn trên mobile ══ */}
+        <div className="bk-desktop-summary">
+          <OrderSummary
+            movie={movie}
+            listSeatHolding={listSeatHolding}
+            selectedCinema={selectedCinema}
+            selectedShowTime={selectedShowTime}
+            bookingInfo={bookingInfo}
+            listBookedSeat={listBookedSeat}
+          />
+        </div>
       </div>
+
+      {/* ══ MOBILE: Floating Action Button ══ */}
+      <div className="bk-mobile-fab-wrap">
+        <button
+          className="bk-mobile-fab"
+          onClick={() => setShowMobileSummary(true)}
+        >
+          <i className="fas fa-receipt me-2"></i>
+          Xem đơn hàng
+          {myHeldSeatsCount > 0 && (
+            <span className="bk-fab-badge">{myHeldSeatsCount}</span>
+          )}
+        </button>
+      </div>
+
+      {/* ══ MOBILE: Bottom Sheet ══ */}
+      {showMobileSummary && (
+        <div
+          className="bk-bottom-sheet-overlay"
+          onClick={() => setShowMobileSummary(false)}
+        >
+          <div
+            className="bk-bottom-sheet"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bk-bottom-sheet__handle" />
+            <div className="bk-bottom-sheet__close" onClick={() => setShowMobileSummary(false)}>
+              <i className="fas fa-times"></i>
+            </div>
+            <div className="bk-bottom-sheet__content">
+              <OrderSummary
+                movie={movie}
+                listSeatHolding={listSeatHolding}
+                selectedCinema={selectedCinema}
+                selectedShowTime={selectedShowTime}
+                bookingInfo={bookingInfo}
+                listBookedSeat={listBookedSeat}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {loading && <Loading />}
     </>
@@ -1183,7 +1023,6 @@ function Booking() {
     return "st-badge--age--all";
   };
 
-
   return (
     <>
       <Header />
@@ -1205,7 +1044,7 @@ function Booking() {
                 <span className="dm-meta-item">{movie.productionYear}</span>
                 <span className="dm-meta-dot" />
                 {movie?.listGenre?.map((item) => (
-                  <span className="dm-genre-tag" key={item.genreID}  onClick={() => {
+                  <span className="dm-genre-tag" key={item.genreID} onClick={() => {
                     history.push("/showTimes", { genre: item.genreID });
                   }}>
                     {item.name}

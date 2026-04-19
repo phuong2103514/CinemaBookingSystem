@@ -43,6 +43,7 @@ function ShowTimes() {
   const [listCinema, setListCinema] = useState([]);
 
   const [inputSearch, setInputSearch] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const [loading, setLoading] = useState(0);
 
@@ -67,8 +68,8 @@ function ShowTimes() {
     if (location.state) {
       if (location.state.keyword !== undefined) {
         setInputSearch(location.state.keyword);
-      } 
-  
+      }
+
       setFilter((prev) => ({
         ...prev,
         ...location.state,
@@ -107,39 +108,19 @@ function ShowTimes() {
     fetchData();
   }, []);
 
-  const startLoading = () => {
-    setLoading((prev) => prev + 1);
-  };
-
-  const stopLoading = () => {
-    setLoading((prev) => prev - 1);
-  };
+  const startLoading = () => setLoading((prev) => prev + 1);
+  const stopLoading = () => setLoading((prev) => prev - 1);
 
   const renderStatusClass = (status) => {
-    if (status === "Đang chiếu") {
-      return "st-badge--status-on";
-    }
-
-    if (status === "Sắp chiếu") {
-      return "st-badge--status-soon";
-    }
-
-    if (status === "Đã kết thúc") {
-      return "st-badge--status-end";
-    }
-
+    if (status === "Đang chiếu") return "st-badge--status-on";
+    if (status === "Sắp chiếu") return "st-badge--status-soon";
+    if (status === "Đã kết thúc") return "st-badge--status-end";
     return "";
   };
 
   const renderAgeClass = (ageRating) => {
-    if (ageRating >= 16 && ageRating < 18) {
-      return "st-badge--age--16";
-    }
-
-    if (ageRating >= 18) {
-      return "st-badge--age--18";
-    }
-
+    if (ageRating >= 16 && ageRating < 18) return "st-badge--age--16";
+    if (ageRating >= 18) return "st-badge--age--18";
     return "st-badge--age--all";
   };
 
@@ -175,9 +156,7 @@ function ShowTimes() {
               {item.status.name}
             </span>
             <span
-              className={`st-badge st-badge--age ${renderAgeClass(
-                item.ageRating
-              )}`}
+              className={`st-badge st-badge--age ${renderAgeClass(item.ageRating)}`}
             >
               {item.ageRating}+
             </span>
@@ -194,20 +173,15 @@ function ShowTimes() {
           <div className="st-movie-card__info">
             <h3 className="st-movie-card__title">{item.title}</h3>
             <p className="st-movie-card__sub mt-2">{item.title}</p>
-
             <div className="st-movie-card__meta-row">
               <span className="st-movie-card__duration">
                 <i className="fas fa-clock me-2"></i>
                 {item.duration} phút
               </span>
               <span className="st-movie-card__year">
-                {`${String(new Date(item.releaseDate).getDate()).padStart(
-                  2,
-                  "0"
-                )}/${String(new Date(item.releaseDate).getMonth() + 1).padStart(
-                  2,
-                  "0"
-                )}`}
+                {`${String(new Date(item.releaseDate).getDate()).padStart(2, "0")}/${String(
+                  new Date(item.releaseDate).getMonth() + 1
+                ).padStart(2, "0")}`}
               </span>
             </div>
           </div>
@@ -218,9 +192,7 @@ function ShowTimes() {
 
   const handleSetPage = (newPage) => {
     const total = movieInfoPagination?.totalPage || 1;
-
     if (newPage < 1 || newPage > total) return;
-
     setPage(newPage);
   };
 
@@ -228,143 +200,101 @@ function ShowTimes() {
     const object = movieInfoPagination?.listGroupbyStatus?.find(
       (item) => item.name === "Đang chiếu"
     );
-    if (object) {
-      return object.total;
-    }
-
-    return 0;
+    return object ? object.total : 0;
   };
 
   const countComingSoon = () => {
     const object = movieInfoPagination?.listGroupbyStatus?.find(
       (item) => item.name === "Sắp chiếu"
     );
-    if (object) {
-      return object.total;
-    }
-
-    return 0;
+    return object ? object.total : 0;
   };
 
   const countEnded = () => {
     const object = movieInfoPagination?.listGroupbyStatus?.find(
       (item) => item.name === "Đã kết thúc"
     );
-    if (object) {
-      return object.total;
-    }
-
-    return 0;
+    return object ? object.total : 0;
   };
 
   const countQuantityFilter = () => {
     return Object.entries(filter).reduce((count, [key, value]) => {
-      if (value !== "all" && value !== 0 && value !== "") {
-        return count + 1;
-      }
+      if (value !== "all" && value !== 0 && value !== "") return count + 1;
       return count;
     }, 0);
   };
 
-  const renderListGenre = () => {
-    return (
-      <>
-        <select
-          className="st-filter-select"
-          value={filter.genre}
-          onChange={(e) => {
-            setFilter({
-              ...filter,
-              genre: e.target.value,
-            });
+  const renderListGenre = () => (
+    <select
+      className="st-filter-select"
+      value={filter.genre}
+      onChange={(e) => {
+        setFilter({ ...filter, genre: e.target.value });
+        handleSetPage(1);
+      }}
+    >
+      <option value="all">Tất cả thể loại</option>
+      {listGenre?.map((item) => (
+        <option key={item.genreID} value={item.genreID}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+  );
 
-            handleSetPage(1);
-          }}
-        >
-          <option value="all">Tất cả thể loại</option>
-          {listGenre?.map((item) => (
-            <option key={item.genreID} value={item.genreID}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-      </>
-    );
-  };
+  const renderListStatus = () => (
+    <select
+      className="st-filter-select"
+      value={filter.status}
+      onChange={(e) => {
+        setFilter({ ...filter, status: e.target.value });
+        handleSetPage(1);
+      }}
+    >
+      <option value="all">Tất cả</option>
+      {listStatus?.map((item) => (
+        <option key={item.statusID} value={item.statusID}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+  );
 
-  const renderListStatus = () => {
-    return (
-      <select
-        className="st-filter-select"
-        value={filter.status}
-        onChange={(e) => {
-          setFilter({
-            ...filter,
-            status: e.target.value,
-          });
+  const renderListCountry = () => (
+    <select
+      className="st-filter-select"
+      value={filter.countryId}
+      onChange={(e) => {
+        setFilter({ ...filter, countryId: e.target.value });
+        handleSetPage(1);
+      }}
+    >
+      <option value="all">Tất cả quốc gia</option>
+      {listCountry?.map((item) => (
+        <option key={item.countryID} value={item.countryID}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+  );
 
-          handleSetPage(1);
-        }}
-      >
-        <option value="all">Tất cả</option>
-        {listStatus?.map((item) => (
-          <option key={item.statusID} value={item.statusID}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-    );
-  };
-
-  const renderListCountry = () => {
-    return (
-      <select
-        className="st-filter-select"
-        value={filter.countryId}
-        onChange={(e) => {
-          setFilter({
-            ...filter,
-            countryId: e.target.value,
-          });
-
-          handleSetPage(1);
-        }}
-      >
-        <option value="all">Tất cả quốc gia</option>
-        {listCountry?.map((item) => (
-          <option key={item.countryID} value={item.countryID}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-    );
-  };
-
-  const renderListCinema = () => {
-    return (
-      <>
-        <select
-          className="st-filter-select"
-          value={filter.cinemaId}
-          onChange={(e) => {
-            setFilter({
-              ...filter,
-              cinemaId: e.target.value,
-            });
-
-            handleSetPage(1);
-          }}
-        >
-          <option value="all">Tất cả rạp</option>
-          {listCinema?.map((item) => (
-            <option key={item.cinemaID} value={item.cinemaID}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-      </>
-    );
-  };
+  const renderListCinema = () => (
+    <select
+      className="st-filter-select"
+      value={filter.cinemaId}
+      onChange={(e) => {
+        setFilter({ ...filter, cinemaId: e.target.value });
+        handleSetPage(1);
+      }}
+    >
+      <option value="all">Tất cả rạp</option>
+      {listCinema?.map((item) => (
+        <option key={item.cinemaID} value={item.cinemaID}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+  );
 
   const renderListShowTime = () => {
     if (filter.cinemaId && filter.cinemaId !== "all") {
@@ -373,46 +303,32 @@ function ShowTimes() {
       const formatShowTime = (startTime, endTime) => {
         const start = new Date(startTime);
         const end = new Date(endTime);
-
-        const formatDate = (date) => {
-          return date.toLocaleDateString("vi-VN");
-        };
-
-        const formatTime = (date) => {
-          return date.toLocaleTimeString("vi-VN", {
+        const formatDate = (date) => date.toLocaleDateString("vi-VN");
+        const formatTime = (date) =>
+          date.toLocaleTimeString("vi-VN", {
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
           });
-        };
-
-        return `${formatDate(start)} | ${formatTime(start)} - ${formatTime(
-          end
-        )}`;
+        return `${formatDate(start)} | ${formatTime(start)} - ${formatTime(end)}`;
       };
 
       return (
-        <>
-          <select
-            className="st-filter-select"
-            value={filter.showTimeId}
-            onChange={(e) => {
-              setFilter({
-                ...filter,
-                showTimeId: e.target.value,
-              });
-
-              handleSetPage(1);
-            }}
-          >
-            <option value="all">Tất cả suất chiếu</option>
-            {cinema?.listShowTime.map((item) => (
-              <option key={item.showTimeID} value={item.showTimeID}>
-                {formatShowTime(item.startTime, item.endTime)}
-              </option>
-            ))}
-          </select>
-        </>
+        <select
+          className="st-filter-select"
+          value={filter.showTimeId}
+          onChange={(e) => {
+            setFilter({ ...filter, showTimeId: e.target.value });
+            handleSetPage(1);
+          }}
+        >
+          <option value="all">Tất cả suất chiếu</option>
+          {cinema?.listShowTime.map((item) => (
+            <option key={item.showTimeID} value={item.showTimeID}>
+              {formatShowTime(item.startTime, item.endTime)}
+            </option>
+          ))}
+        </select>
       );
     }
 
@@ -434,24 +350,18 @@ function ShowTimes() {
       dateFilter: "",
       keyword: "",
     });
-
-    if (inputSearch !== "") {
-      setInputSearch("");
-    }
+    if (inputSearch !== "") setInputSearch("");
   };
 
   const handleSearchButton = () => {
     if (inputSearch !== "") {
-      setFilter({
-        ...filter,
-        keyword: inputSearch,
-      });
+      setFilter({ ...filter, keyword: inputSearch });
     } else {
       alert("Vui lòng nhập từ khóa");
     }
   };
 
-  console.log("Cinema: ", listCinema);
+  console.log("CountryId: ", filter.countryId);
 
   return (
     <>
@@ -472,9 +382,7 @@ function ShowTimes() {
             <div className="col-auto d-none d-md-flex">
               <div className="st-page-header__stats">
                 <div className="st-header-stat">
-                  <span className="st-header-stat__num">
-                    {countNowShowing()}
-                  </span>
+                  <span className="st-header-stat__num">{countNowShowing()}</span>
                   <span className="st-header-stat__label">Phim đang chiếu</span>
                 </div>
                 <div className="st-header-stat__divider" />
@@ -491,8 +399,9 @@ function ShowTimes() {
       {/* ── BODY ── */}
       <div className="st-body">
         <div className="container-fluid">
+
           {/* ── SEARCH BAR ── */}
-          <div className="row mb-4">
+          <div className="row mb-3">
             <div className="col-12">
               <div className="st-search-bar">
                 <i className="fas fa-search st-search-bar__icon"></i>
@@ -502,89 +411,89 @@ function ShowTimes() {
                   placeholder="Tìm kiếm theo tên phim, diễn viên"
                   value={inputSearch}
                   onChange={(e) => setInputSearch(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearchButton()}
                 />
-                <button
-                  className="st-search-bar__btn"
-                  onClick={handleSearchButton}
-                >
-                  <i className="fas fa-search me-2"></i>Tìm Kiếm
+                <button className="st-search-bar__btn" onClick={handleSearchButton}>
+                  <i className="fas fa-search me-2"></i>
+                  <span className="st-search-bar__btn-text">Tìm Kiếm</span>
                 </button>
               </div>
             </div>
           </div>
 
           {/* ── FILTER PANEL ── */}
-          {/* ── FILTER PANEL ── */}
           <div className="st-filter-panel mb-4">
-            <div className="row g-3 align-items-end">
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <label className="st-filter-sublabel">
-                  <i
-                    className="fas fa-calendar-alt me-1"
-                    style={{ color: "#f5a623" }}
-                  ></i>{" "}
-                  Ngày chiếu
-                </label>
-                <div className="st-date-picker-wrap">
-                  <i className="fas fa-calendar-day st-date-picker-wrap__icon"></i>
-                  <input
-                    type="date"
-                    value={filter.dateFilter}
-                    className="st-date-input"
-                    onChange={(e) => {
-                      setFilter({
-                        ...filter,
-                        dateFilter: e.target.value,
-                      });
+            {/* Mobile toggle header */}
+            <div
+              className="st-filter-panel__mobile-header"
+              onClick={() => setFilterOpen((prev) => !prev)}
+            >
+              <span>
+                <i className="fas fa-sliders-h me-2" style={{ color: "#f5a623" }}></i>
+                Bộ lọc
+                {countQuantityFilter() > 0 && (
+                  <span className="st-filter-badge-mobile">{countQuantityFilter()}</span>
+                )}
+              </span>
+              <i className={`fas fa-chevron-${filterOpen ? "up" : "down"} st-filter-panel__chevron`}></i>
+            </div>
 
-                      handleSetPage(1);
-                    }}
-                  />
+            {/* Filter body — always visible on md+, toggle on mobile */}
+            <div className={`st-filter-panel__body ${filterOpen ? "st-filter-panel__body--open" : ""}`}>
+              <div className="row g-3 align-items-end">
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                  <label className="st-filter-sublabel">
+                    <i className="fas fa-calendar-alt me-1" style={{ color: "#f5a623" }}></i>
+                    Ngày chiếu
+                  </label>
+                  <div className="st-date-picker-wrap">
+                    <i className="fas fa-calendar-day st-date-picker-wrap__icon"></i>
+                    <input
+                      type="date"
+                      value={filter.dateFilter}
+                      className="st-date-input"
+                      onChange={(e) => {
+                        setFilter({ ...filter, dateFilter: e.target.value });
+                        handleSetPage(1);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <label className="st-filter-sublabel">Rạp chiếu</label>
-                {renderListCinema()}
-              </div>
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                  <label className="st-filter-sublabel">Rạp chiếu</label>
+                  {renderListCinema()}
+                </div>
 
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <label className="st-filter-sublabel">Suất chiếu</label>
-                {renderListShowTime()}
-              </div>
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                  <label className="st-filter-sublabel">Suất chiếu</label>
+                  {renderListShowTime()}
+                </div>
 
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <label className="st-filter-sublabel">Thể loại</label>
-                {renderListGenre()}
-              </div>
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                  <label className="st-filter-sublabel">Thể loại</label>
+                  {renderListGenre()}
+                </div>
 
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <label className="st-filter-sublabel">Quốc gia</label>
-                {renderListCountry()}
-              </div>
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                  <label className="st-filter-sublabel">Quốc gia</label>
+                  {renderListCountry()}
+                </div>
 
-              <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                <label className="st-filter-sublabel">Trạng thái</label>
-                {renderListStatus()}
-              </div>
+                <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
+                  <label className="st-filter-sublabel">Trạng thái</label>
+                  {renderListStatus()}
+                </div>
 
-              <div className="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
-                <p className="st-filter-applied mb-0">
-                  <i className="fas fa-filter me-1"></i>
-                  Đang áp dụng:&nbsp;
-                  <span className="st-filter-applied__num">
-                    {" "}
-                    {countQuantityFilter()}
-                  </span>{" "}
-                  bộ lọc
-                </p>
-                <div className="d-flex gap-2">
+                <div className="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2 mt-2">
+                  <p className="st-filter-applied mb-0">
+                    <i className="fas fa-filter me-1"></i>
+                    Đang áp dụng:&nbsp;
+                    <span className="st-filter-applied__num">{countQuantityFilter()}</span> bộ lọc
+                  </p>
                   <button className="st-filter-reset-btn" onClick={clearFilter}>
                     <i className="fas fa-undo me-1"></i>Đặt lại
                   </button>
-                  {/* <button className="st-filter-apply-btn">
-                    <i className="fas fa-filter me-1"></i>Áp dụng
-                  </button> */}
                 </div>
               </div>
             </div>
@@ -592,44 +501,32 @@ function ShowTimes() {
 
           {/* ── TOOLBAR ── */}
           <div className="row align-items-center mb-3 g-2">
-            <div className="col">
+            <div className="col-12 col-md">
               <div className="st-status-tabs">
                 <button className="st-status-tab st-status-tab--active">
                   Tất cả
-                  <span className="st-status-tab__count">
-                    {movieInfoPagination.totalMovie}
-                  </span>
+                  <span className="st-status-tab__count">{movieInfoPagination.totalMovie}</span>
                 </button>
                 <button className="st-status-tab">
-                  <span className="st-dot st-dot--showtime"></span>Đang chiếu
-                  <span className="st-status-tab__count">
-                    {countNowShowing()}
-                  </span>
+                  <span className="st-dot st-dot--showtime"></span>
+                  <span className="d-none d-sm-inline">Đang chiếu</span>
+                  <span className="st-status-tab__count">{countNowShowing()}</span>
                 </button>
                 <button className="st-status-tab">
-                  <span className="st-dot st-dot--coming-soon"></span>Sắp chiếu
-                  <span className="st-status-tab__count">
-                    {countComingSoon()}
-                  </span>
+                  <span className="st-dot st-dot--coming-soon"></span>
+                  <span className="d-none d-sm-inline">Sắp chiếu</span>
+                  <span className="st-status-tab__count">{countComingSoon()}</span>
                 </button>
                 <button className="st-status-tab">
-                  <span className="st-dot st-dot--ended"></span>Đã kết thúc
+                  <span className="st-dot st-dot--ended"></span>
+                  <span className="d-none d-sm-inline">Đã kết thúc</span>
                   <span className="st-status-tab__count">{countEnded()}</span>
                 </button>
               </div>
             </div>
             <div className="col-auto d-flex align-items-center gap-3">
-              {/* <select className="st-filter-select st-filter-select--sm">
-                <option>Mới nhất</option>
-                <option>Phổ biến nhất</option>
-                <option>Tên A–Z</option>
-                <option>Thời lượng</option>
-              </select> */}
               <div className="st-view-toggle">
-                <button
-                  className="st-view-btn st-view-btn--active"
-                  title="Dạng lưới"
-                >
+                <button className="st-view-btn st-view-btn--active" title="Dạng lưới">
                   <i className="fas fa-th-large"></i>
                 </button>
                 <button className="st-view-btn" title="Dạng danh sách">
@@ -644,8 +541,7 @@ function ShowTimes() {
 
           {/* ── PAGINATION ── */}
           <div className="row mt-5">
-            <div className="col-12 d-flex justify-content-center align-items-center gap-2">
-              {/* Prev */}
+            <div className="col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap">
               <button
                 className="st-page-btn"
                 onClick={() => handleSetPage(page - 1)}
@@ -654,58 +550,39 @@ function ShowTimes() {
                 <i className="fas fa-chevron-left"></i>
               </button>
 
-              {/* Page 1 */}
               <button
-                className={`st-page-btn ${
-                  page === 1 ? "st-page-btn--active" : ""
-                }`}
+                className={`st-page-btn ${page === 1 ? "st-page-btn--active" : ""}`}
                 onClick={() => handleSetPage(1)}
               >
                 1
               </button>
 
-              {/* ... đầu */}
               {page > 3 && <span className="st-page-dots">...</span>}
 
-              {/* page - 1 */}
               {page > 2 && (
-                <button
-                  className="st-page-btn"
-                  onClick={() => handleSetPage(page - 1)}
-                >
+                <button className="st-page-btn" onClick={() => handleSetPage(page - 1)}>
                   {page - 1}
                 </button>
               )}
 
-              {/* current page */}
               {page !== 1 && page !== movieInfoPagination.totalPage && (
-                <button className="st-page-btn st-page-btn--active">
-                  {page}
-                </button>
+                <button className="st-page-btn st-page-btn--active">{page}</button>
               )}
 
-              {/* page + 1 */}
               {page < movieInfoPagination.totalPage - 1 && (
-                <button
-                  className="st-page-btn"
-                  onClick={() => handleSetPage(page + 1)}
-                >
+                <button className="st-page-btn" onClick={() => handleSetPage(page + 1)}>
                   {page + 1}
                 </button>
               )}
 
-              {/* ... cuối */}
               {page < movieInfoPagination.totalPage - 2 && (
                 <span className="st-page-dots">...</span>
               )}
 
-              {/* Last page */}
               {movieInfoPagination.totalPage > 1 && (
                 <button
                   className={`st-page-btn ${
-                    page === movieInfoPagination.totalPage
-                      ? "st-page-btn--active"
-                      : ""
+                    page === movieInfoPagination.totalPage ? "st-page-btn--active" : ""
                   }`}
                   onClick={() => handleSetPage(movieInfoPagination.totalPage)}
                 >
@@ -713,7 +590,6 @@ function ShowTimes() {
                 </button>
               )}
 
-              {/* Next */}
               <button
                 className="st-page-btn"
                 onClick={() => handleSetPage(page + 1)}
@@ -723,6 +599,7 @@ function ShowTimes() {
               </button>
             </div>
           </div>
+
         </div>
       </div>
 

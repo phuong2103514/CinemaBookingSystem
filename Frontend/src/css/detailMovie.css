@@ -710,3 +710,165 @@
 
   text-shadow: 0 0 6px rgba(255, 59, 48, 0.7);
 }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE ADDITIONS
+══════════════════════════════════════════ */
+
+/* ── MOBILE POSTER trong hero ── */
+.dm-poster__img--mobile {
+  width: 90px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  display: block;
+}
+
+/* ── DESC clamp ── */
+.dm-desc--clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dm-toggle-desc {
+  background: transparent;
+  border: none;
+  color: #f5a623;
+  font-size: 1.35rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  margin-top: 0.4rem;
+  transition: opacity 0.2s;
+}
+
+.dm-toggle-desc:hover {
+  opacity: 0.75;
+}
+
+/* ── BOOK BUTTON full width trên mobile ── */
+.dm-btn--book-full {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .dm-btn--book-full {
+    width: auto;
+  }
+}
+
+/* ── HERO mobile ── */
+@media (max-width: 767px) {
+  .dm-hero {
+    height: auto;
+    min-height: 55vw;
+    align-items: flex-end;
+  }
+
+  .dm-hero__content {
+    padding-bottom: 1.8rem;
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem;
+  }
+
+  .dm-hero__title {
+    font-size: 3rem;
+    line-height: 1.15;
+  }
+
+  .dm-hero__original-title {
+    font-size: 1.3rem;
+  }
+
+  .dm-hero__meta {
+    gap: 0.6rem;
+    font-size: 1.25rem;
+  }
+
+  .dm-meta-item {
+    font-size: 1.25rem;
+  }
+
+  .dm-genre-tag {
+    font-size: 1.2rem;
+    padding: 0.25rem 0.7rem;
+  }
+
+  .dm-hero__info {
+    top: 0;
+  }
+
+  /* BODY */
+  .dm-body {
+    padding: 0.5rem 1rem 3rem;
+  }
+
+  /* BOOKING BAR */
+  .dm-booking-bar {
+    padding: 1.2rem 0 1rem;
+  }
+
+  /* SECTION TITLE */
+  .dm-section__title {
+    font-size: 1.7rem;
+  }
+
+  /* ACTOR */
+  .dm-actor-item {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .dm-actor-item__name {
+    font-size: 1.25rem;
+  }
+
+  /* DATE TABS scroll ngang */
+  .dm-date-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.3rem;
+  }
+
+  .dm-date-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dm-date-tab {
+    flex-shrink: 0;
+    font-size: 1.2rem;
+  }
+
+  /* SIDEBAR CARD */
+  .dm-sidebar-card {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .dm-hero__title {
+    font-size: 2.4rem;
+  }
+
+  .dm-poster__img--mobile {
+    width: 72px;
+  }
+
+  .dm-hero__meta {
+    gap: 0.45rem;
+  }
+
+  .dm-meta-dot {
+    display: none;
+  }
+
+  .dm-hero__meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+  }
+}

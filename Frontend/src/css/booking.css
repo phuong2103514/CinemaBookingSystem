@@ -948,3 +948,289 @@
 
   text-shadow: 0 0 6px rgba(255, 59, 48, 0.7);
 }
+
+
+/* ══════════════════════════════════════
+   RESPONSIVE — mobile / tablet
+══════════════════════════════════════ */
+
+/* Wrap seat-map cho phép scroll ngang trên màn nhỏ */
+.bk-seat-map-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
+}
+
+/* Desktop: cột summary hiện bình thường */
+.bk-desktop-summary {
+  display: contents; /* hoà vào Bootstrap grid như cũ */
+}
+
+/* FAB + bottom-sheet: ẩn trên desktop */
+.bk-mobile-fab-wrap {
+  display: none;
+}
+
+.bk-bottom-sheet-overlay {
+  display: none;
+}
+
+/* ── Tablet (≤ 991px — Bootstrap lg breakpoint) ── */
+@media (max-width: 991.98px) {
+
+  /* Wrapper padding thu hẹp */
+  .bk-wrapper {
+    padding: 1.5rem 1rem 8rem; /* bottom dành chỗ cho FAB */
+  }
+
+  /* Movie bar xếp dọc trên tablet nhỏ */
+  .bk-movie-bar {
+    gap: 1.2rem;
+    padding: 1.2rem 0 1.8rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .bk-movie-bar__title {
+    font-size: 2rem;
+  }
+
+  /* Ẩn cột summary bên phải */
+  .bk-desktop-summary {
+    display: none !important;
+  }
+
+  /* Hiện FAB */
+  .bk-mobile-fab-wrap {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 1.6rem;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0 1.2rem;
+    pointer-events: none;
+  }
+
+  .bk-mobile-fab {
+    pointer-events: all;
+    background: linear-gradient(135deg, #f5a623, #ffb932);
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.4rem;
+    box-shadow: 0 6px 24px rgba(245, 166, 35, 0.45);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .bk-mobile-fab:active {
+    transform: scale(0.96);
+    box-shadow: 0 3px 12px rgba(245, 166, 35, 0.4);
+  }
+
+  .bk-fab-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* Bottom sheet overlay */
+  .bk-bottom-sheet-overlay {
+    display: flex;
+    align-items: flex-end;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1100;
+  }
+
+  .bk-bottom-sheet {
+    background: #13151f;
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0.6rem 0 0;
+    position: relative;
+    animation: bk-sheet-up 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes bk-sheet-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  .bk-bottom-sheet__handle {
+    width: 44px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 99px;
+    margin: 0 auto 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .bk-bottom-sheet__close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    color: #777;
+    font-size: 1.6rem;
+    cursor: pointer;
+    padding: 0.4rem;
+    line-height: 1;
+  }
+
+  .bk-bottom-sheet__close:hover {
+    color: #ccc;
+  }
+
+  .bk-bottom-sheet__content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 1rem 2rem;
+    flex: 1;
+  }
+
+  /* Trong bottom sheet: summary card bỏ sticky, reset width */
+  .bk-bottom-sheet__content .bk-summary-card {
+    position: static;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0;
+  }
+
+  .bk-bottom-sheet__content .bk-summary-col {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .bk-bottom-sheet__content .col-lg-4 {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* booked-block full width trong bottom sheet */
+  .bk-booked-block {
+    width: 100%;
+  }
+}
+
+/* ── Mobile nhỏ (≤ 575px) ── */
+@media (max-width: 575.98px) {
+
+  .bk-wrapper {
+    padding: 1rem 0.6rem 8rem;
+  }
+
+  .bk-movie-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 1rem 0 1.4rem;
+  }
+
+  .bk-movie-bar__poster img {
+    width: 60px;
+  }
+
+  .bk-movie-bar__title {
+    font-size: 1.7rem;
+  }
+
+  .bk-movie-bar__meta {
+    gap: 0.6rem;
+    font-size: 1.2rem;
+  }
+
+  /* Section padding nhỏ hơn */
+  .bk-section {
+    padding: 1.4rem 1rem;
+  }
+
+  .bk-section__title {
+    font-size: 1.5rem;
+  }
+
+  /* Date buttons nhỏ hơn */
+  .bk-date-btn {
+    padding: 0.6rem 0.9rem;
+    min-width: 56px;
+  }
+
+  .bk-date-btn__num {
+    font-size: 1.7rem;
+  }
+
+  /* Cinema block */
+  .bk-cinema-block {
+    padding: 1rem;
+  }
+
+  .bk-cinema-block__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .bk-cinema-block__name {
+    font-size: 1.35rem;
+  }
+
+  .bk-cinema-block__addr {
+    font-size: 1.15rem;
+  }
+
+  /* Showtime buttons */
+  .bk-showtime-btn {
+    padding: 0.4rem 0.9rem;
+  }
+
+  .bk-showtime-btn__time {
+    font-size: 1.35rem;
+  }
+
+  /* Legend ghế: 2 cột */
+  .bk-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem 1rem;
+    justify-items: start;
+  }
+
+  /* Seat size nhỏ hơn chút trên mobile */
+  .bk-seat {
+    width: 28px;
+    height: 24px;
+    border-radius: 4px 4px 2px 2px;
+  }
+
+  .bk-seat-row {
+    gap: 0.3rem;
+  }
+
+  /* Screen wrap */
+  .bk-screen {
+    padding: 0.5rem 3rem;
+    font-size: 1.1rem;
+  }
+}

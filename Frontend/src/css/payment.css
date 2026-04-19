@@ -490,3 +490,142 @@
   color: #635bff;
   opacity: 0.7;
 }
+
+/* ── CONTAINER ── */
+.pm-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ── MAIN LAYOUT (thay thế row g-4 của Bootstrap) ── */
+.pm-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 2rem;
+  align-items: start;
+}
+
+.pm-layout__left {
+  min-width: 0;
+}
+
+.pm-layout__right {
+  min-width: 0;
+}
+
+/* ── RESPONSIVE: Tablet (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .pm-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-layout__right {
+    order: -1; /* Summary card lên trên trên mobile/tablet */
+  }
+
+  .pm-wrapper {
+    padding: 2rem 1.5rem 4rem;
+  }
+}
+
+/* ── RESPONSIVE: Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+  .pm-wrapper {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  /* Movie bar */
+  .bk-movie-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .bk-movie-bar__poster img {
+    width: 80px;
+    height: auto;
+  }
+
+  .bk-movie-bar__title {
+    font-size: 1.6rem;
+  }
+
+  /* Steps */
+  .pm-steps {
+    gap: 0;
+  }
+
+  .pm-step__label {
+    font-size: 1.1rem;
+  }
+
+  .pm-step__circle {
+    width: 34px;
+    height: 34px;
+    font-size: 1.3rem;
+  }
+
+  .pm-step__line {
+    min-width: 40px;
+    margin: 0 0.6rem;
+    margin-bottom: 2.4rem;
+  }
+
+  /* Security bar */
+  .pm-security-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+  }
+
+  /* Summary card */
+  .bk-summary-card {
+    padding: 1.4rem;
+  }
+
+  /* Ticket table */
+  .bk-ticket-table {
+    font-size: 1.2rem;
+  }
+
+  /* Countdown */
+  .pm-countdown {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
+
+/* ── RESPONSIVE: Small mobile (≤ 480px) ── */
+@media (max-width: 480px) {
+  .pm-wrapper {
+    padding: 1rem 0.75rem 2.5rem;
+  }
+
+  .pm-steps {
+    transform: scale(0.9);
+    transform-origin: center;
+  }
+
+  .pm-stripe-sandbox {
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+  }
+
+  .pm-security-bar__item span {
+    font-size: 1.2rem;
+  }
+
+  .bk-section__header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .pm-stripe-header-badge {
+    margin-left: 0;
+  }
+}

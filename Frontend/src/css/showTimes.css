@@ -728,3 +728,150 @@
   color: #fff;
   padding: 0 0.2rem;
 }
+
+/* ── FILTER PANEL RESPONSIVE ── */
+.st-filter-panel__mobile-header {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* PAGE HEADER */
+  .st-page-header {
+    padding: 2rem 1.2rem 1.5rem;
+  }
+
+  .st-page-header__title {
+    font-size: 2.2rem;
+  }
+
+  .st-page-header__subtitle {
+    font-size: 1.3rem;
+  }
+
+  /* BODY */
+  .st-body {
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  /* SEARCH BAR */
+  .st-search-bar__btn-text {
+    display: none;
+  }
+
+  .st-search-bar__btn {
+    padding: 0.65rem 1rem;
+  }
+
+  .st-search-bar__btn i {
+    margin-right: 0 !important;
+  }
+
+  /* FILTER PANEL — collapsible on mobile */
+  .st-filter-panel {
+    padding: 0;
+  }
+
+  .st-filter-panel__mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 1.4rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    user-select: none;
+  }
+
+  .st-filter-panel__chevron {
+    color: #f5a623;
+    font-size: 1.3rem;
+    transition: transform 0.25s;
+  }
+
+  .st-filter-badge-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5a623;
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: 0.6rem;
+  }
+
+  .st-filter-panel__body {
+    display: none;
+    padding: 0 1.2rem 1.2rem;
+  }
+
+  .st-filter-panel__body--open {
+    display: block;
+  }
+
+  /* STATUS TABS scroll ngang */
+  .st-status-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .st-status-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .st-status-tab {
+    font-size: 1.3rem;
+    padding: 0.65rem 1rem;
+    flex-shrink: 0;
+  }
+
+  /* MOVIE CARD — tighter on very small screens */
+  .st-movie-card__title {
+    font-size: 1.4rem;
+  }
+
+  .st-movie-card__sub {
+    font-size: 1.1rem;
+  }
+
+  .st-movie-card__duration,
+  .st-movie-card__year {
+    font-size: 1.1rem;
+  }
+
+  .st-badge {
+    font-size: 1rem;
+    padding: 0.12rem 0.45rem;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Trên md+ luôn hiện filter body */
+  .st-filter-panel__body {
+    display: block !important;
+    padding: 0;
+  }
+
+  .st-filter-panel {
+    padding: 2rem;
+  }
+
+  .st-search-bar__btn-text {
+    display: inline;
+  }
+}
+
+@media (max-width: 575px) {
+  .st-page-header__title {
+    font-size: 1.9rem;
+  }
+
+  .st-movie-card__info {
+    padding: 0.8rem 0.8rem 0.7rem;
+  }
+}

@@ -20,6 +20,11 @@ function Header() {
   const [genreDropdown, setGenreDropdown] = useState(false);
   const [countryDropdown, setCountryDropdown] = useState(false);
 
+  // ── Mobile state (thêm mới, không đụng logic cũ) ──
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileGenreOpen, setMobileGenreOpen] = useState(false);
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -123,87 +128,205 @@ function Header() {
     ));
   };
 
+  // ── Mobile render (thêm mới) ──
+  const renderListGenreMobile = () => {
+    return listGenre.map((item) => (
+      <div
+        className="header__mobile-submenu-item"
+        key={item.genreID}
+        onClick={() => {
+          setMobileMenuOpen(false);
+          history.push("/showTimes", { genre: item.genreID });
+        }}
+      >
+        {item.name}
+      </div>
+    ));
+  };
+
+  const renderListCountryMobile = () => {
+    return listCountry.map((item) => (
+      <div
+        className="header__mobile-submenu-item"
+        key={item.countryID}
+        onClick={() => {
+          setMobileMenuOpen(false);
+          history.push("/showTimes", { countryId: item.countryID });
+        }}
+      >
+        {item.name}
+      </div>
+    ));
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
   };
 
   return (
-    <header className="header__wrapper">
-      <div className="header__inner">
-        {/* ── Logo ── */}
-        <Link to="/" className="header__logo">
-          <img src={logoWeb} alt="RoPhim" className="header__logo-img" />
-        </Link>
+    <>
+      <header className="header__wrapper">
+        <div className="header__inner">
+          {/* ── Logo ── */}
+          <Link to="/" className="header__logo">
+            <img src={logoWeb} alt="RoPhim" className="header__logo-img" />
+          </Link>
 
-        {/* ── Search ── */}
-        <div className="header__search">
-          <i className="fas fa-search"></i>
-          <input
-            type="text"
-            className="header__search-input"
-            placeholder="Tìm kiếm phim, diễn viên"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                history.push("/showTimes", { keyword: e.target.value });
-              }
-            }}
-          />
+          {/* ── Search (desktop) ── */}
+          <div className="header__search">
+            <i className="fas fa-search"></i>
+            <input
+              type="text"
+              className="header__search-input"
+              placeholder="Tìm kiếm phim, diễn viên"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  history.push("/showTimes", { keyword: e.target.value });
+                }
+              }}
+            />
+          </div>
+
+          {/* ── Nav (desktop) ── */}
+          <nav className="header__nav">
+            <Link to="/" className="header__nav-link">
+              Trang chủ
+            </Link>
+
+            <Link to="/showTimes" className="header__nav-link">
+              Lịch chiếu
+            </Link>
+
+            <div className="header__nav-dropdown" ref={dropdownGenreRef}>
+              <span
+                className="header__nav-link header__nav-link--arrow"
+                onClick={() => {
+                  setGenreDropdown(!genreDropdown);
+                }}
+              >
+                Thể Loại
+                <i className="fa-solid fa-caret-down ms-2"></i>
+              </span>
+
+              {genreDropdown && (
+                <div className="header__dropdown-menu--grid">
+                  <div className="header__dropdown-grid">
+                    {renderListGenre()}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="header__nav-dropdown" ref={dropdownCountryRef}>
+              <span
+                className="header__nav-link header__nav-link--arrow"
+                onClick={() => {
+                  setCountryDropdown(!countryDropdown);
+                }}
+              >
+                Quốc gia
+                <i className="fa-solid fa-caret-down ms-2"></i>
+              </span>
+
+              {countryDropdown && (
+                <div className="header__dropdown-menu--grid">
+                  <div className="header__dropdown-grid">
+                    {renderListCountry()}
+                  </div>
+                </div>
+              )}
+            </div>
+          </nav>
+
+          {/* ── Member ── */}
+          {renderMember()}
+
+          {/* ── Hamburger (mobile) ── */}
+          <div
+            className="header__hamburger"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <span className="header__hamburger-line" />
+            <span className="header__hamburger-line" />
+            <span className="header__hamburger-line" />
+          </div>
         </div>
+      </header>
 
-        {/* ── Nav ── */}
-        <nav className="header__nav">
-          <Link to="/" className="header__nav-link">
+      {/* ── Mobile Drawer ── */}
+      {mobileMenuOpen && (
+        <div className="header__mobile-menu header__mobile-menu--open">
+          {/* Search mobile */}
+          <div className="header__mobile-search">
+            <i className="fas fa-search" style={{ color: "#888" }}></i>
+            <input
+              type="text"
+              className="header__mobile-search-input"
+              placeholder="Tìm kiếm phim, diễn viên"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setMobileMenuOpen(false);
+                  history.push("/showTimes", { keyword: e.target.value });
+                }
+              }}
+            />
+          </div>
+
+          <Link
+            to="/"
+            className="header__mobile-nav-link"
+            onClick={() => setMobileMenuOpen(false)}
+          >
             Trang chủ
           </Link>
 
-          <Link to="/showTimes" className="header__nav-link">
+          <Link
+            to="/showTimes"
+            className="header__mobile-nav-link"
+            onClick={() => setMobileMenuOpen(false)}
+          >
             Lịch chiếu
           </Link>
 
-          <div className="header__nav-dropdown" ref={dropdownGenreRef}>
-            <span
-              className="header__nav-link header__nav-link--arrow"
-              onClick={() => {
-                setGenreDropdown(!genreDropdown);
-              }}
-            >
-              Thể Loại
-              <i className="fa-solid fa-caret-down ms-2"></i>
-            </span>
-
-            {genreDropdown && (
-              <div className="header__dropdown-menu--grid">
-                <div className="header__dropdown-grid">{renderListGenre()}</div>
-              </div>
-            )}
+          {/* Thể Loại accordion */}
+          <div
+            className={`header__mobile-nav-toggle ${
+              mobileGenreOpen ? "header__mobile-nav-toggle--open" : ""
+            }`}
+            onClick={() => setMobileGenreOpen(!mobileGenreOpen)}
+          >
+            <span>Thể Loại</span>
+            <i className="fa-solid fa-caret-down"></i>
+          </div>
+          <div
+            className={`header__mobile-submenu ${
+              mobileGenreOpen ? "header__mobile-submenu--open" : ""
+            }`}
+          >
+            {renderListGenreMobile()}
           </div>
 
-          <div className="header__nav-dropdown" ref={dropdownCountryRef}>
-            <span
-              className="header__nav-link header__nav-link--arrow"
-              onClick={() => {
-                setCountryDropdown(!countryDropdown);
-              }}
-            >
-              Quốc gia
-              <i className="fa-solid fa-caret-down ms-2"></i>
-            </span>
-
-            {countryDropdown && (
-              <div className="header__dropdown-menu--grid">
-                <div className="header__dropdown-grid">
-                  {renderListCountry()}
-                </div>
-              </div>
-            )}
+          {/* Quốc Gia accordion */}
+          <div
+            className={`header__mobile-nav-toggle ${
+              mobileCountryOpen ? "header__mobile-nav-toggle--open" : ""
+            }`}
+            onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
+          >
+            <span>Quốc gia</span>
+            <i className="fa-solid fa-caret-down"></i>
           </div>
-        </nav>
-
-        {/* ── Member ── */}
-        {renderMember()}
-      </div>
-    </header>
+          <div
+            className={`header__mobile-submenu ${
+              mobileCountryOpen ? "header__mobile-submenu--open" : ""
+            }`}
+          >
+            {renderListCountryMobile()}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
